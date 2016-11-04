@@ -1,6 +1,6 @@
 # Composer template for Drupal projects hosted on Pantheon
 
-![Build Status](https://web.archive.org/web/20091026223346/http://geocities.com/phkerourio/_borders/ICONE_EN_CONSTRUCTION.GIF)
+![Work In Progress](https://bitbucket.org/repo/oEGxae/images/260980887-ICONE_EN_CONSTRUCTION.GIF)
 
 This project template should provide a kickstart for
 
