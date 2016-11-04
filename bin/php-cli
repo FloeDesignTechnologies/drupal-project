@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+[[ "$(basename "$(realpath "$BASH_SOURCE")")" = $(basename $0) ]] && CMD="bash" || CMD="$(basename $0)"
+
+docker-compose run php-cli $CMD $@

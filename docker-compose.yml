@@ -1,0 +1,64 @@
+version: '2'
+services:
+
+  # Data containet whose volumes are re-used for all other container that needs access to the working directory
+  php-data:
+    image: drupaldocker/php:7-cli
+    entrypoint: /bin/true
+    volumes:
+      - .:/var/www/html:rw
+
+  # DB container
+  db:
+    image: mariadb
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=drupal
+      - MYSQL_USER=drupal
+      - MYSQL_PASSWORD=drupal
+    volumes:
+      - .mariadb:/var/lib/mysql:rw
+
+  # Contaienr to run PHP cli application (composer, etc.)
+  php-cli:
+    build:
+      context: .
+      dockerfile: Dockerfile-php-cli
+      args:
+        USER_UID: ${USER_UID}
+    volumes:
+      # Share the local user's composer cache as a Docker volume
+      - ~/.composer/cache:/home/php/.composer/cache:rw
+    volumes_from:
+      - php-data
+    environment:
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/www/html/vendor/bin
+      - MYSQL_DATABASE=drupal
+      - MYSQL_USER=drupal
+      - MYSQL_PASSWORD=drupal
+    links:
+      - db
+
+  # php-fpm container used as PHP runtime
+  php-fpm:
+    image: drupaldocker/php:7-fpm
+    volumes_from:
+      - php-data
+    environment:
+      - MYSQL_DATABASE=drupal
+      - MYSQL_USER=drupal
+      - MYSQL_PASSWORD=drupal
+    links:
+      - db
+
+  # web container
+  web:
+    image: drupaldocker/nginx
+    environment:
+      DOCROOT: /var/www/html/web
+    ports:
+      - 80:80
+    volumes_from:
+      - php-data
+    links:
+      - php-fpm:php

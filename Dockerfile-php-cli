@@ -1,0 +1,11 @@
+FROM drupaldocker/php:7-cli
+
+ARG USER_UID=1000
+
+# Install needed CLI tools (for Drush)
+RUN apt-get update && apt-get install -y mysql-client openssh-client rsync \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN useradd --uid ${USER_UID} --create-home php
+
+USER ${USER_UID}

@@ -1,44 +1,40 @@
-# Composer template for Drupal projects
+# Composer template for Drupal projects hosted on Pantheon
 
-[![Build Status](https://travis-ci.org/drupal-composer/drupal-project.svg?branch=8.x)](https://travis-ci.org/drupal-composer/drupal-project)
+This project template should provide a kickstart for
+ - managing your local developement environment with Docker
+ - managing your site dependencies with [Composer](https://getcomposer.org/)
+ - hosting your site on Pantheon
 
-This project template should provide a kickstart for managing your site
-dependencies with [Composer](https://getcomposer.org/).
-
-If you want to know how to use it as replacement for
-[Drush Make](https://github.com/drush-ops/drush/blob/master/docs/make.md) visit
-the [Documentation on drupal.org](https://www.drupal.org/node/2471553).
 
 ## Usage
 
-First you need to [install composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx).
-
-> Note: The instructions below refer to the [global composer installation](https://getcomposer.org/doc/00-intro.md#globally).
-You might need to replace `composer` with `php composer.phar` (or similar) 
-for your setup.
+First you need to install [docker](http://www.docker.com/products/docker),
+[docker-compose](https://docs.docker.com/compose/install/).
 
 After that you can create the project:
 
 ```
-composer create-project drupal-composer/drupal-project:8.x-dev some-dir --stability dev --no-interaction
+docker run --rm -v $(pwd):/var/www/html drupaldocker/php:7-cli composer create-project floe/drupal-project  some-dir --stability dev --no-interaction
 ```
 
-With `composer require ...` you can download new dependencies to your 
-installation.
+Then `cd some-dir`, `cp .env.dist .env` and start working on the
+project.
 
-```
-cd some-dir
-composer require drupal/devel:~1.0
-```
-
-The `composer create-project` command passes ownership of all files to the 
-project that is created. You should create a new git repository, and commit 
-all files not excluded by the .gitignore file.
-
+The `composer create-project` command passes ownership of all files to
+the project that is created. You should create a new git repository, 
+update the README.me and composer.json file, then commit all files not
+excluded by the .gitignore file.
+ 
 ## What does the template do?
 
 When installing the given `composer.json` some tasks are taken care of:
 
+* Docker containers to work on the project are defined in the 
+  `docker-compose.yml` file (see below for details).
+* _Aliases_ for the most used commands to run inside the Docker
+  containers are provided in the `bin` directory. It is suggested to put
+  `bin` in your `PATH` while working on the project. The recommended way
+  is to use [direnv](http://direnv.net/).
 * Drupal will be installed in the `web`-directory.
 * Autoloader is implemented to use the generated composer autoloader in `vendor/autoload.php`,
   instead of the one provided by Drupal (`web/vendor/autoload.php`).
@@ -49,6 +45,10 @@ When installing the given `composer.json` some tasks are taken care of:
 * Creates `sites/default/files`-directory.
 * Latest version of drush is installed locally for use at `vendor/bin/drush`.
 * Latest version of DrupalConsole is installed locally for use at `vendor/bin/drupal`.
+
+## Docker containers
+
+
 
 ## Updating Drupal Core
 
@@ -74,19 +74,8 @@ Follow the steps below to update your core files.
    keeping all of your modifications at the beginning or end of the file is a 
    good strategy to keep merges easy.
 
-## Generate composer.json from existing project
-
-With using [the "Composer Generate" drush extension](https://www.drupal.org/project/composer_generate)
-you can now generate a basic `composer.json` file from an existing project. Note
-that the generated `composer.json` might differ from this project's file.
-
 
 ## FAQ
-
-### Should I commit the contrib modules I download
-
-Composer recommends **no**. They provide [argumentation against but also 
-workrounds if a project decides to do it anyway](https://getcomposer.org/doc/faqs/should-i-commit-the-dependencies-in-my-vendor-directory.md).
 
 ### How can I apply patches to downloaded modules?
 
