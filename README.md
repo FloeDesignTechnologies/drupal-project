@@ -10,7 +10,9 @@ This project template should provide a kickstart for
 ## Usage
 
 First you need to install [docker](http://www.docker.com/products/docker),
-and [docker-compose](https://docs.docker.com/compose/install/).
+and [docker-compose](https://docs.docker.com/compose/install/). If using
+OS X, [install GNU coreutils](http://macappstore.org/coreutils/) or any
+other implementation of the `realpath` command.
 
 After that you can create the project:
 
