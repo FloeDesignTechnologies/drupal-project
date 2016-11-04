@@ -25,6 +25,21 @@ docker run --user $(id -u) --rm -v $(pwd):/var/www/html drupaldocker/php:7-cli c
 Then `cd some-dir && cp .env.dist .env` and start working on the
 project.
 
+Use `docker-compose` to run applications inside the configured Docker
+containers:
+
+* `docker-compose run php-cli bash`: Enter a shell to execute cli
+  applications (Composer, Drush, Drupal Console, etc.)
+* `docker-compose up web`: Start a web server inside its own Docker
+  container, accessible as http://localhost.
+  
+_Aliases_ for the most used commands to run inside the Docker containers
+are provided in the `bin` directory. It is suggested to put `bin` in
+your `PATH` while working on the project. The recommended way is to use
+[direnv](http://direnv.net/)
+  
+See the `docker-compose` file for details of the configured containers. 
+
 The `composer create-project` command passes ownership of all files to
 the project that is created. You should create a new git repository, 
 update the README.me and composer.json file, then commit all files not
@@ -35,9 +50,7 @@ excluded by the .gitignore file.
 * Docker containers to work on the project are defined in the 
   `docker-compose.yml` file.
 * _Aliases_ for the most used commands to run inside the Docker
-  containers are provided in the `bin` directory. It is suggested to put
-  `bin` in your `PATH` while working on the project. The recommended way
-  is to use [direnv](http://direnv.net/).
+  containers are provided in the `bin` directory.
 * Drupal will be installed in the `web`-directory.
 * Autoloader is implemented to use the generated composer autoloader in `vendor/autoload.php`,
   instead of the one provided by Drupal (`web/vendor/autoload.php`).
