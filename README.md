@@ -4,7 +4,7 @@
 
 This project template should provide a kickstart for
 
-* managing your local developement environment with Docker
+* managing your local development environment with Docker
 * managing your site dependencies with [Composer](https://getcomposer.org/)
 * hosting your site on Pantheon
 
