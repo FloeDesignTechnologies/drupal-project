@@ -19,7 +19,7 @@ services:
     volumes:
       - .mariadb:/var/lib/mysql:rw
 
-  # Contaienr to run PHP cli application (composer, etc.)
+  # Container to run cli applications (composer, drush, etc.)
   php-cli:
     build:
       context: .
@@ -39,7 +39,7 @@ services:
     links:
       - db
 
-  # php-fpm container used as PHP runtime
+  # php-fpm container used as PHP runtime for the web server
   php-fpm:
     image: drupaldocker/php:7-fpm
     volumes_from:
@@ -51,7 +51,7 @@ services:
     links:
       - db
 
-  # web container
+  # The web server used to access the developement website
   web:
     image: drupaldocker/nginx
     environment:

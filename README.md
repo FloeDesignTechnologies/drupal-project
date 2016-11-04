@@ -1,23 +1,24 @@
 # Composer template for Drupal projects hosted on Pantheon
 
 This project template should provide a kickstart for
- - managing your local developement environment with Docker
- - managing your site dependencies with [Composer](https://getcomposer.org/)
- - hosting your site on Pantheon
+
+* managing your local developement environment with Docker
+* managing your site dependencies with [Composer](https://getcomposer.org/)
+* hosting your site on Pantheon
 
 
 ## Usage
 
 First you need to install [docker](http://www.docker.com/products/docker),
-[docker-compose](https://docs.docker.com/compose/install/).
+and [docker-compose](https://docs.docker.com/compose/install/).
 
 After that you can create the project:
 
 ```
-docker run --rm -v $(pwd):/var/www/html drupaldocker/php:7-cli composer create-project floe/drupal-project  some-dir --stability dev --no-interaction
+docker run --user $(id -u) --rm -v $(pwd):/var/www/html drupaldocker/php:7-cli composer create-project floe/drupal-project some-dir 8.x --stability dev --no-interaction
 ```
 
-Then `cd some-dir`, `cp .env.dist .env` and start working on the
+Then `cd some-dir && cp .env.dist .env` and start working on the
 project.
 
 The `composer create-project` command passes ownership of all files to
@@ -27,10 +28,8 @@ excluded by the .gitignore file.
  
 ## What does the template do?
 
-When installing the given `composer.json` some tasks are taken care of:
-
 * Docker containers to work on the project are defined in the 
-  `docker-compose.yml` file (see below for details).
+  `docker-compose.yml` file.
 * _Aliases_ for the most used commands to run inside the Docker
   containers are provided in the `bin` directory. It is suggested to put
   `bin` in your `PATH` while working on the project. The recommended way
@@ -45,10 +44,6 @@ When installing the given `composer.json` some tasks are taken care of:
 * Creates `sites/default/files`-directory.
 * Latest version of drush is installed locally for use at `vendor/bin/drush`.
 * Latest version of DrupalConsole is installed locally for use at `vendor/bin/drupal`.
-
-## Docker containers
-
-
 
 ## Updating Drupal Core
 
