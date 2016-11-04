@@ -1,4 +1,4 @@
-# Composer template for Drupal projects hosted on Pantheon
+# Composer template for Drupal 8 projects hosted on Pantheon and using Docker for local development environment
 
 ![Work In Progress](https://bitbucket.org/repo/oEGxae/images/260980887-ICONE_EN_CONSTRUCTION.GIF)
 

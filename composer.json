@@ -1,6 +1,6 @@
 {
     "name": "floe/drupal-project",
-    "description": "Project template for Drupal 8 projects with composer",
+    "description": "Composer template for Drupal 8 projects hosted on Pantheon and using Docker for local development environment",
     "type": "project",
     "license": "GPL-2.0+",
     "authors": [
