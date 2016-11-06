@@ -4,6 +4,8 @@ ARG USER_UID=1000
 
 # Install needed CLI tools (for Drush)
 RUN apt-get update && apt-get install -y mysql-client openssh-client rsync \
+  && mkdir -p /etc/drush \
+  && echo "<?php \$options['root'] = '/var/www/html/web';" > /etc/drush/drushrc.php \
   && rm -rf /var/lib/apt/lists/*
 
 RUN useradd --uid ${USER_UID} --create-home php
