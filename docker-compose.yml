@@ -36,6 +36,8 @@ services:
       - MYSQL_DATABASE=drupal
       - MYSQL_USER=drupal
       - MYSQL_PASSWORD=drupal
+      - SIMPLETEST_DB
+      - SIMPLETEST_BASE_URL
     links:
       - db
 

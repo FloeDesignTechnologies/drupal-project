@@ -1,38 +1,31 @@
-language: php
-php:
-  - 5.5
-  - 5.6
-  - 7.0
+sudo: required
 
-sudo: false
+language: php
+
+services:
+  - docker
 
 env:
   global:
-    - SIMPLETEST_DB=sqlite://tmp/site.sqlite
-    - SIMPLETEST_BASE_URL="http://127.0.0.1:8080"
-  matrix:
-    - RELEASE=stable COMPOSER_CHANNEL=stable
-    - RELEASE=dev COMPOSER_CHANNEL=stable
-    - RELEASE=stable COMPOSER_CHANNEL=snapshot
+    - SIMPLETEST_DB=mysql://drupal:drupal@db/drupal
+    - SIMPLETEST_BASE_URL="http://web:80"
 
 before_install:
-  - echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-  - phpenv config-rm xdebug.ini
-  - composer --verbose self-update --$COMPOSER_CHANNEL
-  - composer --version
+  # Build all containers before installing
+  - docker-compose build
 
 install:
-  - composer --verbose install
+  # Install Composer managed dependencies
+  - docker-compose run php-cli composer --verbose install
+
+before_script:
+  # Start the web container
+  - docker-compose up -d web
 
 script:
-  - if [[ $RELEASE = dev ]]; then composer --verbose require --no-update drupal/core:8.1.x-dev; fi;
-  - if [[ $RELEASE = dev ]]; then composer --verbose update; fi;
-  - cd $TRAVIS_BUILD_DIR/web
-  - ./../vendor/bin/drush site-install --verbose --yes --db-url=sqlite://tmp/site.sqlite
-  - ./../vendor/bin/drush runserver http://127.0.0.1:8080 &
-  - sleep 3
-  # Skip core/tests/Drupal/Tests/ComposerIntegrationTest.php because web/ has no composer.json
-  # Ignore PageCache group temporarily, @see https://www.drupal.org/node/2770673
-  - ./../vendor/bin/phpunit -c core --testsuite unit --exclude-group Composer,DependencyInjection,PageCache
-  - ./../vendor/bin/drush
-  - ./../vendor/bin/drupal
+  - curl -I localhost
+  - docker-compose run php-cli composer run-script --timeout=0 tests
+  - docker-compose run -w /var/www/html/web php-cli drush site-install --verbose --yes
+  - docker-compose run -w /var/www/html/web php-cli drush status
+  - docker-compose run -w /var/www/html/web php-cli drupal site:status
+

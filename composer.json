@@ -55,6 +55,9 @@
         ],
         "post-update-cmd": [
             "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "tests": [
+            "phpunit -c web/core --testsuite unit --exclude-group Composer,DependencyInjection,PageCache"
         ]
     },
     "extra": {
