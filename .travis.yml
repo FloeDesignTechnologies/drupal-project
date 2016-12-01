@@ -12,6 +12,7 @@ env:
 
 before_install:
   # Build all containers before installing
+  - sed "s/^USER_UID=.*/USER_UID=`id -u`/" .env.dist  > .env
   - docker-compose build
 
 install:
