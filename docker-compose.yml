@@ -43,7 +43,7 @@ services:
 
   # php-fpm container used as PHP runtime for the web server
   php-fpm:
-    image: drupaldocker/php:7-fpm
+    image: drupaldocker/php-dev:7-fpm
     volumes_from:
       - php-data
     environment:
