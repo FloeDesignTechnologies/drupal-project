@@ -1,6 +1,6 @@
 # Composer template for Drupal 8 projects hosted on Pantheon and using Docker for local development environment
 
-![Work In Progress](https://bitbucket.org/repo/oEGxae/images/260980887-ICONE_EN_CONSTRUCTION.GIF)
+__⚠️ Experimental project__
 
 This project template should provide a kickstart for
 
@@ -19,11 +19,11 @@ other implementation of the `realpath` command.
 After that you can create the project:
 
 ```
-docker run --user $(id -u) --rm -v $(pwd):/var/www/html drupaldocker/php:7-cli composer create-project floe/drupal-project some-dir 8.x --stability dev --no-interaction
+docker run --rm -v $(pwd):/var/www/html drupaldocker/php:7-cli composer create-project --stability dev --no-interaction --ansi floe/drupal-project some-dir 8.x 
 ```
 
-Then `cd some-dir && cp .env.dist .env` and start working on the
-project.
+Then ```sudo chown `id -u`:`id -g` -R some-dir && cd some-dir && echo USER_UID=`id -u` > .env```
+and start working on your project.
 
 Use `docker-compose` to run applications inside the configured Docker
 containers:
@@ -40,7 +40,7 @@ your `PATH` while working on the project. The recommended way is to use
   
 See the `docker-compose` file for details of the configured containers. 
 
-The `composer create-project` command passes ownership of all files to
+The `create-project` command above passes ownership of all files to
 the project that is created. You should create a new git repository, 
 update the README.me and composer.json file, then commit all files not
 excluded by the .gitignore file.
