@@ -22,7 +22,7 @@ After that you can create the project:
 docker run --rm -v $(pwd):/var/www/html drupaldocker/php:7-cli composer create-project --stability dev --no-interaction --ansi floe/drupal-project some-dir 8.x 
 ```
 
-Then ```sudo chown `id -u`:`id -g` -R some-dir && cd some-dir && echo USER_UID=`id -u` > .env```
+Then ```sudo chown `id -u`:`id -g` -R some-dir && cd some-dir && sed "s/^USER_UID=.*/USER_UID=`id -u`/" .env.dist  > .env```
 and start working on your project.
 
 Use `docker-compose` to run applications inside the configured Docker
