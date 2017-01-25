@@ -1,13 +1,9 @@
 version: '2'
+
+volumes:
+  db-volume:
+
 services:
-
-  # Data containet whose volumes are re-used for all other container that needs access to the working directory
-  php-data:
-    image: drupaldocker/php:7-cli
-    entrypoint: /bin/true
-    volumes:
-      - .:/var/www/html:rw
-
   # DB container
   db:
     image: mariadb
@@ -17,7 +13,7 @@ services:
       - MYSQL_USER=drupal
       - MYSQL_PASSWORD=drupal
     volumes:
-      - .mariadb:/var/lib/mysql:rw
+      - db-volume:/var/lib/mysql
 
   # Container to run cli applications (composer, drush, etc.)
   php-cli:
@@ -27,10 +23,16 @@ services:
       args:
         USER_UID: ${USER_UID}
     volumes:
+      - .:/var/www/html
       # Share the local user's composer cache as a Docker volume
       - ~/.composer/cache:/home/php/.composer/cache:rw
-    volumes_from:
-      - php-data
+      # Share the local user's terminus cache as a Docker volume
+      - ~/.terminus/cache:/home/php/.terminus/cache:rw
+      # Share the local user's npm cache as a Docker volume
+      - ~/.npm:/home/php/.npm:rw
+      # Share the local user's SSH keys and configuration (read-only, except known_hosts)
+      - ~/.ssh:/home/php/.ssh:ro
+      - ~/.ssh/known_hosts:/home/php/.ssh/known_hosts:rw
     environment:
       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/var/www/html/vendor/bin
       - MYSQL_DATABASE=drupal
@@ -41,11 +43,11 @@ services:
     links:
       - db
 
-  # php-fpm container used as PHP runtime for the web server
+  # Container used as PHP runtime for the web server
   php-fpm:
     image: drupaldocker/php-dev:7-fpm
-    volumes_from:
-      - php-data
+    volumes:
+      - .:/var/www/html
     environment:
       - MYSQL_DATABASE=drupal
       - MYSQL_USER=drupal
@@ -53,14 +55,14 @@ services:
     links:
       - db
 
-  # The web server used to access the developement website
+  # Container used as web server
   web:
     image: drupaldocker/nginx
     environment:
       DOCROOT: /var/www/html/web
     ports:
-      - 80:80
-    volumes_from:
-      - php-data
+      - ${PORT}:80
+    volumes:
+      - .:/var/www/html
     links:
       - php-fpm:php

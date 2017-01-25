@@ -56,6 +56,10 @@
         "post-update-cmd": [
             "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
         ],
+        "post-create-project-cmd": [
+            "sed \"s/^USER_UID=.*/USER_UID=$USER_UID/\" .env.dist  > .env",
+            "chown $USER_UID:$USER_GUID -R . "
+        ],
         "tests": [
             "phpunit -c web/core --testsuite unit --exclude-group Composer,DependencyInjection,PageCache"
         ]

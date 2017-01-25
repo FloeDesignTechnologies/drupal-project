@@ -19,11 +19,8 @@ other implementation of the `realpath` command.
 After that you can create the project:
 
 ```
-docker run --rm -v $(pwd):/var/www/html -v $HOME/.composer/cache:/composer/cache:rw drupaldocker/php:7-cli composer create-project --stability dev --ansi floe/drupal-project some-dir 8.x 
+docker run --rm -v $(pwd):/var/www/html -v $HOME/.composer/cache:/root/.composer/cache -e COMPOSER_ALLOW_SUPERUSER=1 -e USER_UID=$(id -u) -e USER_GUID=$(id -g) drupaldocker/php:7-cli composer create-project --stability dev --ansi floe/drupal-project some-dir 8.x 
 ```
-
-Then ```sudo chown -R `id -u`:`id -g` some-dir && cd some-dir && sed "s/^USER_UID=.*/USER_UID=`id -u`/" .env.dist  > .env```
-and start working on your project.
 
 Use `docker-compose` to run applications inside the configured Docker
 containers:
