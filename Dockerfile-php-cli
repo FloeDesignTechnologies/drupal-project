@@ -8,6 +8,6 @@ RUN apt-get update && apt-get install -y mysql-client openssh-client rsync \
   && echo "<?php \$options['root'] = '/var/www/html/web';" > /etc/drush/drushrc.php \
   && rm -rf /var/lib/apt/lists/*
 
+# Create the runtime user account
 RUN useradd --uid ${USER_UID} --create-home php
-
 USER ${USER_UID}
